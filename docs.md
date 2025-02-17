@@ -1,7 +1,9 @@
 # I Update System, Install docker, containerd, k8s
 
 ### 1. Update System
-```sudo apt update &&  sudo apt upgrade -y```
+```
+sudo apt update &&  sudo apt upgrade -y
+```
 
 ### 2. Disable swap
 ```
@@ -45,6 +47,13 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ```
 vim /var/lib/kubelet/config.yaml # cgroupDriver should be set to systemd
 vim /etc/containerd/config.toml # cgroup should be set to false
+
+# Check those two files after instalation, if containerd config does not have SystemdCgroup = false, we need to generate default k8s config
+sudo containerd config default | sudo tee /etc/containerd/config.toml
+
+vim /etc/containerd/config.toml # find SystemdCgroup and set it to false
+
+sudo systemctl restart containerd
 ```
 
 ### Documentation
